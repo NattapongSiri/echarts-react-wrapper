@@ -1,8 +1,12 @@
 {
   "name": "echarts-react-wrapper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Echarts wrap as React component",
   "main": "bin/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NattapongSiri/echarts-react-wrapper"
+  },
   "scripts": {
     "test": "jest --silent=false"
   },
