@@ -1,5 +1,5 @@
 import * as echarts from 'echarts'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useReducer, useRef} from 'react'
 
 export type EventListener = {
   click?: (params: any, context: any) => any
@@ -38,26 +38,64 @@ export type EventListener = {
   rendered?: (params: any, context: any) => any
   finished?: (params: any, context: any) => any
 }
-
-export function EchartsComponent({options, notMerge, lazyUpdate, replaceMerge, silent, transition, onInit, eventHandlers = {}, theme, opts = {}}: echarts.SetOptionOpts & {options: echarts.EChartsCoreOption, onInit?: (instance: echarts.ECharts) => void, eventHandlers?: EventListener, theme?: string | object, opts?: {locale?: string, renderer?: 'canvas' | 'svg', devicePixelRatio?: number, useDirtyRect?: boolean, ssr?: boolean, width?: number, height?: number}}) {
-  const el = useRef<HTMLElement>()
-  const [instance, setInstance] = useState<echarts.ECharts>()
+export type EchartsOpts = {
+  locale?: string, 
+  renderer?: 'canvas' | 'svg', 
+  devicePixelRatio?: number, 
+  useDirtyRect?: boolean,
+  ssr?: boolean, 
+  width?: number, 
+  height?: number
+}
+export function EchartsComponent({
+  option, 
+  notMerge, 
+  lazyUpdate, 
+  replaceMerge, 
+  silent, 
+  transition, 
+  onInit, 
+  eventHandlers = {}, 
+  theme, 
+  opts, 
+  ...htmlAtt
+}: echarts.SetOptionOpts & React.HTMLAttributes<any> & {
+  option?: echarts.EChartsCoreOption, 
+  onInit?: (instance: echarts.ECharts) => void, 
+  eventHandlers?: EventListener, 
+  theme?: string | object, 
+  opts?: EchartsOpts
+}) {
+  let [_, makeReady] = useReducer(() => true, false)
   useEffect(() => {
-      process.nextTick(() => {
-        if (el?.current !== undefined && instance !== undefined) {
-          const ec = echarts.init(el.current, theme, opts)
-          setInstance(ec)
-          if (typeof onInit === "function")
-            onInit(ec)
-        }
-      })
-  }, [el.current])
+    window.addEventListener("load", makeReady)
+    return () => {
+      window.removeEventListener("load", makeReady)
+    }
+  })
+  const el = useRef<HTMLDivElement>(null)
+  const currentTheme = useRef<string | object | null | undefined>(null)
+  const currentOpts = useRef<EchartsOpts | null | undefined>(null)
+  let instance : echarts.ECharts | undefined = undefined
+  const container = el?.current
+  if (container !== null) {
+    if (currentTheme.current !== theme || currentOpts.current !== opts) {
+      currentTheme.current = theme
+      currentOpts.current = opts
+      echarts.dispose(container)
+      const ec = echarts.init(container, theme, opts)
+      if (typeof onInit === "function") 
+        onInit(ec)
+    }
+    instance = echarts.getInstanceByDom(container)
+  }
+
   if (instance !== undefined) {
-    instance.setOption(options, {notMerge, lazyUpdate, replaceMerge, silent, transition})
+    if (option !== undefined)
+      instance.setOption(option, {notMerge, lazyUpdate, replaceMerge, silent, transition})
     for (let [event, handler] of Object.entries(eventHandlers)) {
       instance.on(event.toLowerCase(), handler)
     }
   }
-  
-  return React.createElement("div", {"data-testid": "EchartsComponent",  ref: el})
+  return <div data-testid="EchartsComponent" ref={el} {...htmlAtt}/>
 }
