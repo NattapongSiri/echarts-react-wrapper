@@ -2,6 +2,11 @@ React component of Echarts.
 It requires ECharts version 5.x.
 The development is done with React 18.0.
 
+## How to install
+`npm -i echarts react echarts-react-wrapper`
+
+It requires peer two dependencies, react and echarts.
+I use React 18.0 and Echarts 5.3.2 for testing this component.
 ## How to use
 ```tsx
 import { EchartsComponent } from 'echarts-react-wrapper'
