@@ -30,7 +30,7 @@ export function ChartContainer() {
         data: [1, 2, 3, 4]
       }]
     }}
-    eventHandlers={{
+    eventsHandler={{
       click: (params, context) => {
         console.log(params, context)
       }
@@ -44,7 +44,7 @@ export function ChartContainer() {
 - opts - See [init function opts prop](https://echarts.apache.org/en/api.html#echarts.init).
 - notMerge, replaceMerge, lazyUpdate - See Echarts' [setOption's opts prop](https://echarts.apache.org/en/api.html#echartsInstance.setOption)
 - onInit - A callback function which when ECharts is initialized, it will call this callback with Echarts instance as argument.
-- eventHandlers - An object where each key can be one of event name from [here](https://echarts.apache.org/en/api.html#events) and object value must be a function that took `params` and `context` as it arguments. For more details, see this [tutorial](https://echarts.apache.org/handbook/en/concepts/event)
+- eventsHandler - An object where each key can be one of event name from [here](https://echarts.apache.org/en/api.html#events) and object value must be a function that took `params` and `context` as it arguments. For more details, see this [tutorial](https://echarts.apache.org/handbook/en/concepts/event)
 
 ## How to fire an action/event
 Use onInit callback to obtains Echarts instance. After that, you can follow this [tutorial](https://echarts.apache.org/handbook/en/concepts/event#writing-code-to-trigger-component-action-manually) to fire an action/event.
@@ -63,7 +63,7 @@ export function ChartContainer({option}) {
       height: 500
     }} 
     options={option}
-    eventHandlers={{
+    eventsHandler={{
       click: (params, context) => {
         console.log(params, context)
       }
@@ -127,7 +127,7 @@ export function ChartContainer({/* list of props that may involve option logic *
       height: 500
     }} 
     onInit={instance => setEcharts(instance)}
-    eventHandlers={{
+    eventsHandler={{
       click: (params, context) => {
         console.log(params, context)
       }
@@ -136,3 +136,7 @@ export function ChartContainer({/* list of props that may involve option logic *
 }
 ```
 This usage style may be much more efficient if it involve constructing large and complex data or dataset for chart.
+
+## Breaking change
+### 0.1.x to 0.2
+- Rename eventHandlers to eventsHandler

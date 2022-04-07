@@ -1,7 +1,7 @@
 import * as echarts from 'echarts'
 import React, {useEffect, useReducer, useRef} from 'react'
 
-export type EventListener = {
+export type EventsListener = {
   click?: (params: any, context: any) => any
   dblClick?: (params: any, context: any) => any
   mouseDown?: (params: any, context: any) => any
@@ -55,14 +55,14 @@ export function EchartsComponent({
   silent, 
   transition, 
   onInit, 
-  eventHandlers = {}, 
+  eventsHandler = {}, 
   theme, 
   opts, 
   ...htmlAtt
 }: echarts.SetOptionOpts & React.HTMLAttributes<any> & {
   option?: echarts.EChartsCoreOption, 
   onInit?: (instance: echarts.ECharts) => void, 
-  eventHandlers?: EventListener, 
+  eventsHandler?: EventsListener, 
   theme?: string | object, 
   opts?: EchartsOpts
 }) {
@@ -76,6 +76,7 @@ export function EchartsComponent({
   const el = useRef<HTMLDivElement>(null)
   const currentTheme = useRef<string | object | null | undefined>(null)
   const currentOpts = useRef<EchartsOpts | null | undefined>(null)
+  const currentEventsHandler = useRef<EventsListener>(null)
   let instance : echarts.ECharts | undefined = undefined
   const container = el?.current
   if (container !== null) {
@@ -93,7 +94,13 @@ export function EchartsComponent({
   if (instance !== undefined) {
     if (option !== undefined)
       instance.setOption(option, {notMerge, lazyUpdate, replaceMerge, silent, transition})
-    for (let [event, handler] of Object.entries(eventHandlers)) {
+    if (currentEventsHandler.current !== eventsHandler) {
+      let events = Object.keys(currentEventsHandler) as (keyof EventsListener)[]
+      for (let event of events) {
+        instance.off(event)
+      }
+    }
+    for (let [event, handler] of Object.entries(eventsHandler)) {
       instance.on(event.toLowerCase(), handler)
     }
   }
