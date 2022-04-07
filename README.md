@@ -62,7 +62,7 @@ export function ChartContainer({option}) {
       width: 500, 
       height: 500
     }} 
-    options={option}
+    option={option}
     eventsHandler={{
       click: (params, context) => {
         console.log(params, context)
