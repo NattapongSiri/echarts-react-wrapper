@@ -68,10 +68,7 @@ export function EchartsComponent({
 }) {
   let [_, makeReady] = useReducer(() => true, false)
   useEffect(() => {
-    window.addEventListener("load", makeReady)
-    return () => {
-      window.removeEventListener("load", makeReady)
-    }
+    setTimeout(() => makeReady(), 0)
   })
   const el = useRef<HTMLDivElement>(null)
   const currentTheme = useRef<string | object | null | undefined>(null)
