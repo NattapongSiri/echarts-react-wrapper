@@ -1,6 +1,6 @@
 {
   "name": "echarts-react-wrapper",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Echarts wrap as React component",
   "main": "bin/index.js",
   "repository": {
