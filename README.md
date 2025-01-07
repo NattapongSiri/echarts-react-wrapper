@@ -138,5 +138,7 @@ export function ChartContainer({/* list of props that may involve option logic *
 This usage style may be much more efficient if it involve constructing large and complex data or dataset for chart.
 
 ## Breaking change
+### 0.2 to 0.3
+- Upgrade React version to 18 and 19. It is no longer support React 17.
 ### 0.1.x to 0.2
 - Rename eventHandlers to eventsHandler
