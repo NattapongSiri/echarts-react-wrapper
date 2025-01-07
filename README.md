@@ -6,7 +6,7 @@ The development is done with React 18.
 `npm -i echarts react echarts-react-wrapper`
 
 It requires peer two dependencies, react and echarts.
-I use React 17 and Echarts 5.3 for testing this component.
+I use React 18 and Echarts 5.6 for testing this component.
 ## How to use
 ```tsx
 import { EchartsComponent } from 'echarts-react-wrapper'

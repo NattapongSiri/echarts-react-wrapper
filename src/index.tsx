@@ -38,15 +38,6 @@ export type EventsListener = {
   rendered?: (params: any, context: any) => any
   finished?: (params: any, context: any) => any
 }
-export type EchartsOpts = {
-  locale?: string, 
-  renderer?: 'canvas' | 'svg', 
-  devicePixelRatio?: number, 
-  useDirtyRect?: boolean,
-  ssr?: boolean, 
-  width?: number, 
-  height?: number
-}
 export function EchartsComponent({
   option, 
   notMerge, 
@@ -64,7 +55,7 @@ export function EchartsComponent({
   onInit?: (instance: echarts.ECharts) => void, 
   eventsHandler?: EventsListener, 
   theme?: string | object, 
-  opts?: EchartsOpts
+  opts?: echarts.EChartsInitOpts
 }) {
   let [_, makeReady] = useReducer(() => true, false)
   useEffect(() => {
@@ -72,7 +63,7 @@ export function EchartsComponent({
   })
   const el = useRef<HTMLDivElement>(null)
   const currentTheme = useRef<string | object | null | undefined>(null)
-  const currentOpts = useRef<EchartsOpts | null | undefined>(null)
+  const currentOpts = useRef<echarts.EChartsInitOpts | null | undefined>(null)
   const currentEventsHandler = useRef<EventsListener>(null)
   let instance : echarts.ECharts | undefined = undefined
   const container = el?.current
